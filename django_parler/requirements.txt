@@ -12,3 +12,4 @@ django-model-utils
 elasticsearch-dsl
 django-elasticsearch-dsl
 django-elasticsearch-dsl-drf
+django-filter

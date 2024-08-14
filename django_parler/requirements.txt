@@ -1,0 +1,14 @@
+Django==5.0.7
+sqlparse==0.5.0
+requests
+djangorestframework
+python-dotenv
+psycopg[binary]
+uuid
+boto3
+django-storages
+django-parler 
+django-model-utils
+elasticsearch-dsl
+django-elasticsearch-dsl
+django-elasticsearch-dsl-drf

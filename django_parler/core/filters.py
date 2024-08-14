@@ -1,32 +1,27 @@
-import django_filters
-from .models import BlogPost
+from rest_framework import filters
 from django.db.models import Q
-from unidecode import unidecode
 
-def normalize(value):
-    return (value
-            .replace('İ', 'I').replace('ı', 'i')
-            .replace('ş', 's').replace('Ş', 's')
-            .replace('ç', 'c').replace('Ç', 'c')
-            .replace('ö', 'o').replace('Ö', 'o')
-            .replace('ü', 'u').replace('Ü', 'u')
-            .replace('ğ', 'g').replace('Ğ', 'g')
-            .replace('ı', 'i').replace('I', 'i')
-    )
+TRANSLATION_TABLE = str.maketrans({
+        'ş': 's', 'Ş': 'S',
+        'ı': 'i', 'I': 'i',
+        'ç': 'c', 'Ç': 'C',
+        'ü': 'u', 'Ü': 'U',
+        'ö': 'o', 'Ö': 'O',
+        'ğ': 'g', 'Ğ': 'G',
 
-class TurkishCharFilter(django_filters.CharFilter):
-    def filter(self, qs, value):
-        if value:
-            normalized_value = normalize(value.lower())
-            return qs.filter(
-                Q(translations__title__icontains=normalized_value) |
-                Q(translations__content__icontains=normalized_value)
+    })
+
+def normalize_query(query):
+    return query.translate(TRANSLATION_TABLE).lower()
+
+class CustomSearchFilter(filters.SearchFilter):
+    def filter_queryset(self, request, queryset, view):
+        search_param = request.query_params.get('search', None)
+        if search_param:
+            normalized_query = normalize_query(search_param)
+            
+            queryset = queryset.filter(
+                Q(translations__title__unaccent__icontains=normalized_query)  |
+                Q(translations__content__unaccent__icontains=normalized_query)
             )
-        return qs
-
-class BlogPostFilter(django_filters.FilterSet):
-    search = TurkishCharFilter(field_name='translations__title')
-
-    class Meta:
-        model = BlogPost
-        fields = ['search']
+        return queryset

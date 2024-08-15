@@ -9,4 +9,4 @@ class BlogPost(TranslatableModel):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+        return self.safe_translation_getter('title', language_code='tr', any_language=True)

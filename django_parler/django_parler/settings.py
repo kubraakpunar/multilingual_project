@@ -45,6 +45,7 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     "core",
+    "search",
 ]
 
 THIRD_PARTY_APPS = [
@@ -158,7 +159,7 @@ PARLER_LANGUAGES = {
         {'code': 'tr'},
     ),
     'default': {
-        'fallback': 'en',
+        'fallback': 'en , tr',
         'hide_untranslated': False,
     }
 }

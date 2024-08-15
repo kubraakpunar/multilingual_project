@@ -1,27 +1,18 @@
 from rest_framework import filters
 from django.db.models import Q
+from text_unidecode import unidecode
 
-TRANSLATION_TABLE = str.maketrans({
-        'ş': 's', 'Ş': 'S',
-        'ı': 'i', 'I': 'i',
-        'ç': 'c', 'Ç': 'C',
-        'ü': 'u', 'Ü': 'U',
-        'ö': 'o', 'Ö': 'O',
-        'ğ': 'g', 'Ğ': 'G',
+def remove_turkish_characters(query):
+    return unidecode(query).lower()
 
-    })
-
-def normalize_query(query):
-    return query.translate(TRANSLATION_TABLE).lower()
-
-class CustomSearchFilter(filters.SearchFilter):
+class TurkishCompatibleSearchFilter(filters.SearchFilter):
     def filter_queryset(self, request, queryset, view):
-        search_param = request.query_params.get('search', None)
-        if search_param:
-            normalized_query = normalize_query(search_param)
+        search_term = request.query_params.get('search', None)
+        if search_term:
+            normalized_term = remove_turkish_characters(search_term)
             
             queryset = queryset.filter(
-                Q(translations__title__unaccent__icontains=normalized_query)  |
-                Q(translations__content__unaccent__icontains=normalized_query)
+                Q(translations__title__unaccent__icontains=normalized_term) |
+                Q(translations__content__unaccent__icontains=normalized_term)
             )
         return queryset

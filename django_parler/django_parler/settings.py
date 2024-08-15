@@ -149,17 +149,17 @@ REST_FRAMEWORK = {
 }
 
 LANGUAGES = (
-    ('en', 'English'),
     ('tr', 'Türkçe'),
+    ('en', 'English'),
 )
 
 PARLER_LANGUAGES = {
     None: (
-        {'code': 'en'},
         {'code': 'tr'},
+        {'code': 'en'},
     ),
     'default': {
-        'fallback': 'en , tr',
+        'fallback': 'tr',
         'hide_untranslated': False,
     }
 }

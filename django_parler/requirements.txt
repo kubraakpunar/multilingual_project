@@ -9,8 +9,5 @@ boto3
 django-storages
 django-parler 
 django-model-utils
-elasticsearch-dsl
-django-elasticsearch-dsl
-django-elasticsearch-dsl-drf
 django-filter
 text-unicode

@@ -3,6 +3,7 @@ from django.db.models import Q
 from text_unidecode import unidecode
 
 def remove_turkish_characters(query):
+    
     return unidecode(query).lower()
 
 class TurkishCompatibleSearchFilter(filters.SearchFilter):
